@@ -359,7 +359,7 @@ const _abi = [
     stateMutability: "nonpayable",
     type: "function",
   },
-];
+] as const;
 
 export class ICanonicalTransactionChain__factory {
   static readonly abi = _abi;

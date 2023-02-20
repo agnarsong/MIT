@@ -48,7 +48,7 @@ const _abi = [
     stateMutability: "nonpayable",
     type: "function",
   },
-];
+] as const;
 
 export class IBVM_L2ToL1MessagePasser__factory {
   static readonly abi = _abi;

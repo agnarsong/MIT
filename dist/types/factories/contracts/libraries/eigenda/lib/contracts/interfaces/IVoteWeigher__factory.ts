@@ -66,7 +66,7 @@ const _abi = [
     stateMutability: "nonpayable",
     type: "function",
   },
-];
+] as const;
 
 export class IVoteWeigher__factory {
   static readonly abi = _abi;

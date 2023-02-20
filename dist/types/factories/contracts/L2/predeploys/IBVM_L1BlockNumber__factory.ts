@@ -23,7 +23,7 @@ const _abi = [
     stateMutability: "view",
     type: "function",
   },
-];
+] as const;
 
 export class IBVM_L1BlockNumber__factory {
   static readonly abi = _abi;

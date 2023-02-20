@@ -130,7 +130,7 @@ const _abi = [
     stateMutability: "nonpayable",
     type: "function",
   },
-];
+] as const;
 
 export class IChainStorageContainer__factory {
   static readonly abi = _abi;

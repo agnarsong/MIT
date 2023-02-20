@@ -1,3 +1,21 @@
+.DS_Store
+.idea
+.env
+node_modules
+
+#Hardhat files
+cache
+artifacts
+typechain
+typechain-types
+
+
+#package
+package-lock.json
+
+yarn.lock
+yarn-error.log
+
 src/contract-artifacts.ts
 src/contract-deployed-artifacts.ts
 addresses.json

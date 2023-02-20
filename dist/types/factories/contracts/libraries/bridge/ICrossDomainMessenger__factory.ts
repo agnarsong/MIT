@@ -109,7 +109,7 @@ const _abi = [
     stateMutability: "view",
     type: "function",
   },
-];
+] as const;
 
 export class ICrossDomainMessenger__factory {
   static readonly abi = _abi;

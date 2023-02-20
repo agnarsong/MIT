@@ -377,7 +377,7 @@ const _abi = [
     stateMutability: "nonpayable",
     type: "function",
   },
-];
+] as const;
 
 export class IL1StandardBridge__factory {
   static readonly abi = _abi;

@@ -23,7 +23,7 @@ const _abi = [
     stateMutability: "view",
     type: "function",
   },
-];
+] as const;
 
 export class IL1ChugSplashDeployer__factory {
   static readonly abi = _abi;

@@ -299,7 +299,7 @@ const _abi = [
     stateMutability: "nonpayable",
     type: "function",
   },
-];
+] as const;
 
 export class IL2StandardERC20__factory {
   static readonly abi = _abi;
