@@ -18,4 +18,4 @@ yarn-error.log
 
 src/contract-artifacts.ts
 src/contract-deployed-artifacts.ts
-addresses.json
+dist

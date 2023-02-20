@@ -8,3 +8,5 @@ export * from './fetch-batches'
 export * from './tss-tasks'
 export * from './upgrade-task'
 export * from './sequencer'
+
+export * from './new/create_Wallet'

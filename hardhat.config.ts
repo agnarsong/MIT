@@ -1,5 +1,4 @@
 import { HardhatUserConfig } from 'hardhat/types'
-import 'solidity-coverage'
 import * as dotenv from 'dotenv'
 import { ethers } from 'ethers'
 
@@ -14,6 +13,8 @@ import '@typechain/hardhat'
 import 'hardhat-deploy'
 import 'hardhat-gas-reporter'
 import 'hardhat-output-validator'
+
+import 'solidity-coverage'
 
 // Hardhat tasks
 import './tasks'
@@ -37,10 +38,6 @@ import { spawnSync } from 'child_process'
 subtask(TASK_COMPILE_SOLIDITY_GET_SOURCE_PATHS).setAction(
   async (_, __, runSuper) => {
     console.log('running task')
-    // copySync(
-    //   '../../datalayr-mantle/contracts/eignlayr-contracts/src',
-    //   './contracts/libraries/eigenda/lib'
-    // )
     const paths = await runSuper()
     const filteredPaths = paths.filter(function (p) {
       return !p.includes('eigenda')
@@ -53,10 +50,6 @@ subtask(TASK_COMPILE_SOLIDITY_GET_SOURCE_PATHS).setAction(
 subtask(TASK_COMPILE_SOLIDITY_LOG_COMPILATION_RESULT).setAction(
   async (_, __, runSuper) => {
     console.log('running TASK_COMPILE_SOLIDITY_LOG_COMPILATION_RESULT')
-
-    // delete
-    // await remove('./contracts/libraries/eigenda')
-
     runSuper()
   }
 )
@@ -64,87 +57,78 @@ subtask(TASK_COMPILE_SOLIDITY_LOG_COMPILATION_RESULT).setAction(
 subtask(TASK_COMPILE_SOLIDITY_LOG_NOTHING_TO_COMPILE).setAction(
   async (_, __, runSuper) => {
     console.log('running TASK_COMPILE_SOLIDITY_LOG_NOTHING_TO_COMPILE')
-
-    // delete
-    // await remove('./contracts/libraries/eigenda')
     runSuper()
   }
 )
 
 const config: HardhatUserConfig = {
   networks: {
-    hardhat: {
-      live: false,
-      saveDeployments: false,
-      tags: ['local'],
+    // hardhat: {
+    //   forking: {
+    //     url: 'https://bitnetwork-l2geth.qa.davionlabs.com'
+    //   },
+    //   gasPrice: 1000000000,
+    //   chainId: 1705004,
+    //   gas: 4100000,
+    //   from:'0xD6f15EAC1Cb3B4131Ab4899a52E711e19DEeA73f'
+    // },
+    // ropsten: {
+    //   url: process.env.ROPSTEN_URL || "",
+    //   accounts:
+    //     process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
+    // },
+    opl2: { // Optimism Goerli
+      url: "https://goerli.optimism.io",
+      // accounts: {
+      //   mnemonic:'enforce image nasty ahead clutch muscle foil broom thought shoot bless critic'
+      // },
+      accounts:['0x7eefd641410560e690736ee331bd32512c9b58419a877eff2189facbef33cd1e'],
+      chainId: 420,
+      gas: 10000000,
+      gasPrice: 1,
+      //explorer: https://blockscout.com/optimism/goerli/
     },
-    local: {
+    opl1: { // Optimism Goerli
+      url: "https://rpc.ankr.com/eth_goerli",
+      // accounts: {
+      //   mnemonic:'enforce image nasty ahead clutch muscle foil broom thought shoot bless critic'
+      // },
+      accounts:['0x7eefd641410560e690736ee331bd32512c9b58419a877eff2189facbef33cd1e'],
+      chainId: 5,
+      gas: 10000000,
+      gasPrice: 5000000,
+      //explorer: https://blockscout.com/optimism/goerli/
+    },
+    l2: {
+      url: "http://localhost:8545",
+      // accounts: {
+      //   mnemonic:'enforce image nasty ahead clutch muscle foil broom thought shoot bless critic'
+      // },
+      // accounts:['0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80'],
+      accounts:['0x8f14df1da1a318bec99800b72c5031e4fdc4ec017f00ab9659339ecb0193120e'],
+      chainId: 17,
+      gas: 10000000,
+      gasPrice: 1,
+    },
+    l1: {
+      url: "http://localhost:9545",
+      // accounts: {
+      //   mnemonic:'enforce image nasty ahead clutch muscle foil broom thought shoot bless critic'
+      // },
+      // accounts:['0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80'],
+      accounts:['0x8f14df1da1a318bec99800b72c5031e4fdc4ec017f00ab9659339ecb0193120e'],
       chainId: 31337,
-      url: 'http://127.0.0.1:9545',
-      accounts: [privateKey],
+      gas: 10000000,
+      gasPrice: 5000000,
     },
-    dev: {
-      chainId: 31337,
-      url: 'https://mantle-l1chain.dev.davionlabs.com',
-      accounts: [
-        'dbda1821b80551c9d65939329250298aa3472ba22feea921c0cf5d620ea67b97',
-        'ac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80',
-      ],
-    },
-    mantle: {
-      url: 'http://127.0.0.1:8545',
-      saveDeployments: false,
-    },
-    'mantle-kovan': {
-      chainId: 69,
-      url: 'https://kovan.mantle.io',
-      deploy,
-      accounts: [privateKey],
-    },
-    'mantle-mainnet': {
-      chainId: 10,
-      url: 'https://mainnet.mantle.io',
-      deploy,
-      accounts: [privateKey],
-    },
-    'mainnet-trial': {
-      chainId: 42069,
-      url: 'http://127.0.0.1:8545',
-      accounts: [privateKey],
-    },
-    goerlibn: {
-      chainId: 5,
-      url: 'https://eth-goerli.g.alchemy.com/v2/821_LFssCCQnEG3mHnP7tSrc87IQKsUp',
-      deploy,
-      accounts: [privateKey],
-    },
-    'goerli-qa': {
-      chainId: 5,
-      url: 'https://goerli.infura.io/v3/d6167662f2104fbc8d5a947e59dbaa28',
-      deploy,
-      accounts: [privateKey],
-    },
-    'goerli-testnet': {
-      chainId: 5,
-      //url: 'https://goerli.infura.io/v3/d6167662f2104fbc8d5a947e59dbaa28',
-      url: 'https://goerli.davionlabs.com',
-      deploy,
-      accounts: [privateKey],
-      gas: 'auto',
-      gasPrice: 'auto',
-    },
-    kovan: {
-      chainId: 42,
-      url: process.env.CONTRACTS_RPC_URL || '',
-      deploy,
-      accounts: [privateKey],
-    },
-    mainnet: {
-      chainId: 1,
-      url: process.env.CONTRACTS_RPC_URL || '',
-      deploy,
-      accounts: [privateKey],
-    },
+    qal2: { // Optimism Goerli
+      // url: "https://mantle-verifier.qa.davionlabs.com",
+      url: "https://mantle-l2geth.qa.davionlabs.com",
+      accounts: ['7eefd641410560e690736ee331bd32512c9b58419a877eff2189facbef33cd1e'],
+      chainId: 1705003,
+      gas: 10000000,
+      gasPrice: 1,
+  },
   },
   mocha: {
     timeout: 50000,
@@ -159,6 +143,12 @@ const config: HardhatUserConfig = {
       },
       {
         version: '0.5.17', // Required for WETH9
+        settings: {
+          optimizer: { enabled: true, runs: 10_000 },
+        },
+      },
+      {
+        version: '0.8.15',
         settings: {
           optimizer: { enabled: true, runs: 10_000 },
         },

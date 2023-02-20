@@ -1,15 +1,13 @@
 /* External Imports */
-import { ethers } from "hardhat";
-import dotenv from "dotenv";
-dotenv.config();
+import { ethers } from 'ethers';
 
-import chai from 'chai';
 import { BigNumber, Wallet, Contract, ContractTransaction, 
   ContractReceipt, providers, Transaction } from "ethers";
 import { Provider, TransactionRequest } from '@ethersproject/abstract-provider';
-import * as mantle from "@mantleio/sdk"
-const should = chai.should()
-const expect = chai.expect
+import * as mantle from "@mantleio/sdk";
+
+import { expect } from 'chai';
+import { should } from 'chai';
 
 const getSigners = async () => {
   const l1RpcProvider = new ethers.providers.JsonRpcProvider(process.env.L1_URL)
@@ -61,29 +59,29 @@ const getSigners = async () => {
 const getContracts = async () => {
   // const greeterJSON = JSON.parse(fs.readFileSync("Greeter.json")) 
   const L1_CROSS_DOMAIN_MESSENGER_ABI =await import(
-    '../artifacts/contracts/mantleContracts/contracts/L1/messaging/L1CrossDomainMessenger.sol/L1CrossDomainMessenger.json'
+    '../artifacts/contracts/L1/messaging/L1CrossDomainMessenger.sol/L1CrossDomainMessenger.json'
   )
   const L2_CROSS_DOMAIN_MESSENGER_ABI =await import(
-    '../artifacts/contracts/mantleContracts/contracts/L2/messaging/L2CrossDomainMessenger.sol/L2CrossDomainMessenger.json'
+    '../artifacts/contracts/L2/messaging/L2CrossDomainMessenger.sol/L2CrossDomainMessenger.json'
   )
   const L1_Standard_Bridge_ABI =await import(
-    '../artifacts/contracts/mantleContracts/contracts/L1/messaging/L1StandardBridge.sol/L1StandardBridge.json'
+    '../artifacts/contracts/L1/messaging/L1StandardBridge.sol/L1StandardBridge.json'
   )
   const L1_ERC721_Bridge_ABI =await import(
-    '../artifacts/contracts/mantleContracts/contracts/L1/messaging/L1ERC721Bridge.sol/L1ERC721Bridge.json'
+    '../artifacts/contracts/custom/op-erc721/ERC721Bridge.sol/ERC721Bridge.json'
   )
   const L2_Standard_Bridge_ABI =await import(
-    '../artifacts/contracts/mantleContracts/contracts/L2/messaging/L2StandardBridge.sol/L2StandardBridge.json'
+    '../artifacts/contracts/L2/messaging/L2StandardBridge.sol/L2StandardBridge.json'
   )
   const L2_ERC721_Bridge_ABI =await import(
-    '../artifacts/contracts/mantleContracts/contracts/L2/messaging/L2ERC721Bridge.sol/L2ERC721Bridge.json'
+    '../artifacts/contracts/custom/op-erc721/ERC721Bridge.sol/ERC721Bridge.json'
   )
   const L2_BVM_GasPriceOracle_ABI =await import(
-    '../artifacts/contracts/mantleContracts/contracts/L2/predeploys/BVM_GasPriceOracle.sol/BVM_GasPriceOracle.json'
+    '../artifacts/contracts/L2/predeploys/BVM_GasPriceOracle.sol/BVM_GasPriceOracle.json'
   )
 
   const L2_BVM_SequencerFeeVault_ABI =await import(
-    '../artifacts/contracts/mantleContracts/contracts/L2/predeploys/BVM_SequencerFeeVault.sol/BVM_SequencerFeeVault.json'
+    '../artifacts/contracts/L2/predeploys/BVM_SequencerFeeVault.sol/BVM_SequencerFeeVault.json'
   )
 
   // const Sequencer_ABI = await import(
@@ -166,10 +164,10 @@ const getContracts = async () => {
 const getTokenContracts = async () => {
   // const greeterJSON = JSON.parse(fs.readFileSync("Greeter.json")) 
   const Bit_Token =await import(
-    '../artifacts/contracts/mantleContracts/contracts/L1/local/TestBitToken.sol/BitTokenERC20.json'
+    '../artifacts/contracts/L1/local/TestBitToken.sol/BitTokenERC20.json'
   )
   const Bit_ETH_Token =await import(
-    '../artifacts/contracts/mantleContracts/contracts/L2/predeploys/BVM_ETH.sol/BVM_ETH.json'
+    '../artifacts/contracts/L2/predeploys/BVM_ETH.sol/BVM_ETH.json'
   )
 
   let signers = await getSigners()
