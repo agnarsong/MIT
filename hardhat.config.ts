@@ -23,43 +23,6 @@ import './tasks'
 dotenv.config()
 
 const enableGasReport = !!process.env.ENABLE_GAS_REPORT
-const privateKey = process.env.PRIVATE_KEY || '0x' + '11'.repeat(32) // this is to avoid hardhat error
-const deploy = process.env.DEPLOY_DIRECTORY || 'deploy'
-
-import { copySync, remove } from 'fs-extra'
-import { subtask } from 'hardhat/config'
-import {
-  TASK_COMPILE_SOLIDITY_GET_SOURCE_PATHS,
-  TASK_COMPILE_SOLIDITY_LOG_COMPILATION_RESULT,
-  TASK_COMPILE_SOLIDITY_LOG_NOTHING_TO_COMPILE
-} from 'hardhat/builtin-tasks/task-names'
-import { spawnSync } from 'child_process'
-
-subtask(TASK_COMPILE_SOLIDITY_GET_SOURCE_PATHS).setAction(
-  async (_, __, runSuper) => {
-    console.log('running task')
-    const paths = await runSuper()
-    const filteredPaths = paths.filter(function (p) {
-      return !p.includes('eigenda')
-    })
-    console.log('end task')
-    return filteredPaths
-  }
-)
-
-subtask(TASK_COMPILE_SOLIDITY_LOG_COMPILATION_RESULT).setAction(
-  async (_, __, runSuper) => {
-    console.log('running TASK_COMPILE_SOLIDITY_LOG_COMPILATION_RESULT')
-    runSuper()
-  }
-)
-
-subtask(TASK_COMPILE_SOLIDITY_LOG_NOTHING_TO_COMPILE).setAction(
-  async (_, __, runSuper) => {
-    console.log('running TASK_COMPILE_SOLIDITY_LOG_NOTHING_TO_COMPILE')
-    runSuper()
-  }
-)
 
 const config: HardhatUserConfig = {
   networks: {
@@ -211,7 +174,7 @@ const config: HardhatUserConfig = {
     ],
   },
   outputValidator: {
-    runOnCompile: true,
+    runOnCompile: false,
     errorMode: false,
     checks: {
       events: false,

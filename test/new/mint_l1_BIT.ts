@@ -4,6 +4,7 @@ import {
   crossChainMessenger, displayWei, TestResult,
   AllBalances, Balances } from '../../utils/setup'
 import {execSync} from 'child_process';
+import { expect } from "chai";
 
 let tr: TestResult
 let amount: string
@@ -40,8 +41,8 @@ describe('l1 执行mint BIT', function () {
         L1_BIT_TOKEN.balanceOf(tr.SIGNERS.L1_FINALIZE_Wallet.address)
 
       // 用户的ETH需要支付mint的gas fee
-      tr.ALLBALANCES.BEFORE.L1_ETH_Balance.should.be.above(0)
-      tr.ALLBALANCES.BEFORE.L1_F_ETH_Balance.should.be.above(0)
+      expect(tr.ALLBALANCES.BEFORE.L1_ETH_Balance).to.be.above(0)
+      expect(tr.ALLBALANCES.BEFORE.L1_F_ETH_Balance).to.be.above(0)
     })
 
     it('执行 mint tx', async () => {
@@ -51,13 +52,12 @@ describe('l1 执行mint BIT', function () {
                           // mint()
       // console.log("===========>tx1", tx1)
       // console.log("===========>recp", (await tx1.wait())['events'][0]['topics'])
-      tx1.type.should.to.equal(2)
+      expect(tx1.type).to.equal(2)
 
       let tx2 = await tr.TOKEN_CONTRACTS.L1_BIT_TOKEN.
                           connect(tr.SIGNERS.L1_FINALIZE_Wallet).mint(ethers.utils.parseEther(amount))
                           // mint()
-                          
-      tx2.type.should.to.equal(2)
+      expect(tx2.type).to.equal(2)
 
       execSync('sleep 20');
     })

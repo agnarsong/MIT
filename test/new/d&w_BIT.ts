@@ -2,11 +2,9 @@ import { ethers } from "hardhat";
 import { 
   getSigners, getContracts, getTokenContracts, 
   crossChainMessenger, displayWei, TestResult,
-  AllBalances, Balances } from '../utils/setup'
+  AllBalances, Balances, expect } from '../../utils/setup'
 
 import {execSync} from 'child_process';
-import dotenv from "dotenv"
-dotenv.config()
 
 let tr: TestResult
 let amount: string
@@ -213,7 +211,7 @@ describe('depositBIT and withdrawBIT', function () {
       tr.ALLBALANCES.BEFORE.L2_T_Supply = await tr.TOKEN_CONTRACTS.L2_BIT_TOKEN.totalSupply()
 
       // l1用户的balance会被用于转账以及支付fee
-      tr.ALLBALANCES.BEFORE.L1_ETH_Balance.should.be.at.least(0)
+      expect(tr.ALLBALANCES.BEFORE.L1_ETH_Balance).to.be.at.least(0)
     })
 
     //approve
@@ -224,9 +222,9 @@ describe('depositBIT and withdrawBIT', function () {
         ethers.utils.parseEther(amount)
       )
       // console.log("\tapprove txhash: ", tr.APPROVE_TX.hash)
-      tr.APPROVE_TX.type!.should.to.equal(2)
-      tr.APPROVE_TX.chainId.should.to.equal(+process.env.L1CHAINID!)
-      tr.APPROVE_TX.hash.should.to.have.lengthOf(66)
+      expect(tr.APPROVE_TX.type!).to.equal(2)
+      expect(tr.APPROVE_TX.chainId).to.equal(+process.env.L1CHAINID!)
+      expect(tr.APPROVE_TX.hash).to.have.lengthOf(66)
     })
 
     it('should get bit allowance before', async ()=>{
@@ -305,9 +303,9 @@ describe('depositBIT and withdrawBIT', function () {
       tr.ALLBALANCES.BEFORE.L1_SB_Balance = await tr.TOKEN_CONTRACTS.L1_BIT_TOKEN.balanceOf(tr.CONTRACTS.L1_Standard_Bridge.address)
       tr.ALLBALANCES.BEFORE.L2_T_Supply = await tr.TOKEN_CONTRACTS.L2_BIT_TOKEN.totalSupply()
 
-      tr.ALLBALANCES.BEFORE.L1_F_ETH_Balance.should.be.at.least(0)
+      expect(tr.ALLBALANCES.BEFORE.L1_F_ETH_Balance).to.be.at.least(0)
       // l2用户的balance会被用于转账
-      tr.ALLBALANCES.BEFORE.L2_BIT_Balance.should.be.at.least(0)
+      expect(tr.ALLBALANCES.BEFORE.L2_BIT_Balance).to.be.at.least(0)
     })
     
     it('should trigger the withdraw BIT function with the given amount', async () => {
@@ -321,14 +319,14 @@ describe('depositBIT and withdrawBIT', function () {
       // console.log("\twithdraw response hash: ", tr.WITHDRAW_TX.hash)
       // 返回的type为null，可能需要关注
       // tr.WITHDRAW_TX.type!.should.to.equal(2)
-      tr.WITHDRAW_TX.chainId.should.to.equal(+process.env.L2CHAINID!)
-      tr.WITHDRAW_TX.hash.should.to.have.lengthOf(66)
+      expect(tr.WITHDRAW_TX.chainId).to.equal(+process.env.L2CHAINID!)
+      expect(tr.WITHDRAW_TX.hash).to.have.lengthOf(66)
 
       tr.WITHDRAW_TX_RCPT = await tr.WITHDRAW_TX.wait()
       // console.log("rcpt status: ", tr.WITHDRAW_TX_RCPT.status)
       // console.log("rcpt to: ", tr.WITHDRAW_TX_RCPT.to)
-      tr.WITHDRAW_TX_RCPT.status?.should.to.equal(1)
-      tr.WITHDRAW_TX_RCPT.to.should.to.equal(process.env.L2_Standard_Bridge!)
+      expect(tr.WITHDRAW_TX_RCPT.status!).to.equal(1)
+      expect(tr.WITHDRAW_TX_RCPT.to).to.equal(process.env.L2_Standard_Bridge!)
 
       execSync('sleep 10');
     })
@@ -345,14 +343,14 @@ describe('depositBIT and withdrawBIT', function () {
       // console.log("\twithdraw response hash: ", tr.WITHDRAW_TX.hash)
       // 返回的type为null，可能需要关注
       // tr.WITHDRAW_TX.type!.should.to.equal(2)
-      tr.WITHDRAW_TX.chainId.should.to.equal(+process.env.L2CHAINID!)
-      tr.WITHDRAW_TX.hash.should.to.have.lengthOf(66)
+      expect(tr.WITHDRAW_TX.chainId).to.equal(+process.env.L2CHAINID!)
+      expect(tr.WITHDRAW_TX.hash).to.have.lengthOf(66)
 
       tr.WITHDRAW_TX_RCPT = await tr.WITHDRAW_TX.wait()
       // console.log("rcpt status: ", tr.WITHDRAW_TX_RCPT.status)
       // console.log("rcpt to: ", tr.WITHDRAW_TX_RCPT.to)
-      tr.WITHDRAW_TX_RCPT.status?.should.to.equal(1)
-      tr.WITHDRAW_TX_RCPT.to.should.to.equal(process.env.L2_Standard_Bridge!)
+      expect(tr.WITHDRAW_TX_RCPT.status!).to.equal(1)
+      expect(tr.WITHDRAW_TX_RCPT.to).to.equal(process.env.L2_Standard_Bridge!)
 
       execSync('sleep 10');
     })
@@ -402,17 +400,17 @@ describe('depositBIT and withdrawBIT', function () {
 
       // 如果请求 finalizeMessage,那么l1的balance = 期望到账后的总额 - 执行finalizeMessage 消耗的gasfee
       // 可以使用另外一个账户执行 finalizeMessage，或者调整断言
-      tr.ALLBALANCES.AFTER.L1_BIT_Balance.should.to.equal(
+      expect(tr.ALLBALANCES.AFTER.L1_BIT_Balance).to.equal(
         tr.ALLBALANCES.BEFORE.L1_BIT_Balance.add(
           ethers.utils.parseEther(amount).div(2)
         )
       )
       // skip finalizeMessage, 需要跳过这个断言
-      tr.ALLBALANCES.AFTER.L1_F_ETH_Balance.should.to.below(
+      expect(tr.ALLBALANCES.AFTER.L1_F_ETH_Balance).to.below(
         tr.ALLBALANCES.BEFORE.L1_F_ETH_Balance
       )
       // 目前l2的gasfee为0，这里可能有问题
-      tr.ALLBALANCES.AFTER.L2_BIT_Balance.should.to.below(
+      expect(tr.ALLBALANCES.AFTER.L2_BIT_Balance).to.below(
         tr.ALLBALANCES.BEFORE.L2_BIT_Balance.sub(
           ethers.utils.parseEther(amount).div(2)
         )
