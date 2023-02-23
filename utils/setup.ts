@@ -84,12 +84,17 @@ const getContracts = async () => {
     '../artifacts/contracts/L2/predeploys/BVM_SequencerFeeVault.sol/BVM_SequencerFeeVault.json'
   )
 
-  // const Sequencer_ABI = await import(
-  //   ''
-  // )
+  const Sequencer_ABI = await import(
+    '../artifacts/contracts/L1/sequencer/Sequencer.sol/Sequencer.json'
+  )
 
   let signers = await getSigners()
 
+  const sequencer = new ethers.Contract(
+    process.env.Sequencer!, 
+    Sequencer_ABI.abi, 
+    signers.L1_Wallet
+  )
   const l1cdm = new ethers.Contract(
     process.env.Proxy__BVM_L1CrossDomainMessenger!, 
     L1_CROSS_DOMAIN_MESSENGER_ABI.abi, 
@@ -157,7 +162,8 @@ const getContracts = async () => {
     L2_Standard_Bridge_BY_SDK:        l2sbbs,
     L2_BVM_GasPriceOracle:            l2bgpo,
     L2_BVM_SequencerFeeVault:         l2sfv,
-    L2_BVM_SequencerFeeVault_BY_SDK:  l2sfvbs
+    L2_BVM_SequencerFeeVault_BY_SDK:  l2sfvbs,
+    SEQUENCER:                        sequencer
   }
 }
 
@@ -264,7 +270,8 @@ export type Contracts = {
   L2_Standard_Bridge_BY_SDK:        Contract,
   L2_BVM_GasPriceOracle:            Contract,
   L2_BVM_SequencerFeeVault:         Contract,
-  L2_BVM_SequencerFeeVault_BY_SDK:  Contract
+  L2_BVM_SequencerFeeVault_BY_SDK:  Contract,
+  SEQUENCER:                        Contract
 }
 
 export type TokenContracts = {

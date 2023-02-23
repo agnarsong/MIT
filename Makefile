@@ -1,10 +1,6 @@
-# 后续补充从接口获取数据，生成.env
-init:
-	$(eval env ?= local)
-	@cp .$(env).env .env
-
 setup:
-	./utils/formakefile/setup.sh $(DPK)
+	$(eval env ?= local)
+	./utils/formakefile/setup.sh $(env) $(DPK)
 
 accounts:
 	yarn hardhat customAccounts
