@@ -75,6 +75,7 @@
     "@ethersproject/hardware-wallets": "^5.6.1",
     "@ethersproject/providers": "^5.6.8",
     "@mantleio/hardhat-deploy-config": "0.1.0",
+    "@nomicfoundation/hardhat-network-helpers": "^1.0.8",
     "@nomiclabs/ethereumjs-vm": "^4.2.2",
     "@nomiclabs/hardhat-ethers": "^2.0.2",
     "@nomiclabs/hardhat-etherscan": "^3.0.3",

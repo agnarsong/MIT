@@ -10,7 +10,7 @@ import {execSync} from 'child_process';
 let tr: TestResult
 let amount: string
 
-describe('Sequencer\'s contract testcast', function () {
+describe('Sequencer\'s contract testcases', function () {
 
   this.timeout(150000);
   this.slow(150000);
@@ -56,13 +56,55 @@ describe('Sequencer\'s contract testcast', function () {
       let sequencers = await tr.CONTRACTS.SEQUENCER.getSequencers()
       let Owners = await tr.CONTRACTS.SEQUENCER.getOwners()
 
+      console.log("sequencers: ", sequencers)
       expect(Owners[0]).to.be.equal(sequencers[0].owner)
     })
     
-    it ('should query getOwners', async () => {
+  })
 
-      console.log("getOwners", await tr.CONTRACTS.SEQUENCER.getOwners())
-      // expect(await tr.CONTRACTS.SEQUENCER.bitToken()).to.be.equal(process.env.TestBitToken)
+  describe.skip("update sequencer\'s contract", () => {
+
+    it ('should add sequencer node', async () => {
+      const l1RpcProvider = new ethers.providers.JsonRpcProvider(process.env.L1_URL)    
+      const s = new ethers.Wallet(process.env.PRIVATE_KEY!, l1RpcProvider);
+
+      const sequencer = await tr.CONTRACTS.SEQUENCER.connect(s)
+
+      // await sequencer.updateEpoch(2)
+
+      // expect(await sequencer.epoch()).to.be.equal(2)
+
+      await tr.TOKEN_CONTRACTS.L1_BIT_TOKEN.connect(s).approve(sequencer.address, "1000000000000000000000")
+
+      const tx = await sequencer.createSequencer("1000000000000000000000", "0x0524621723D140c0559740DC03227C3Bd7AdaA24", "0x5ae036ab44ff5c188fc04dd00524621723d140c0559740dc03227c3bd7adaa24")
+
+      console.log(tx)
+
+      // sequencers
+      console.log(await sequencer.sequencers(await s.getAddress()))
+
+      let sequencers = await sequencer.getSequencers()
+
+      console.log(sequencers)
+      execSync('sleep 1');
+    })
+
+    it ('should withdrawAll', async () => {
+      const l1RpcProvider = new ethers.providers.JsonRpcProvider(process.env.L1_URL)    
+      const s = new ethers.Wallet(process.env.PRIVATE_KEY!, l1RpcProvider);
+
+      const sequencer = await tr.CONTRACTS.SEQUENCER.connect(s)
+
+      await tr.TOKEN_CONTRACTS.L1_BIT_TOKEN.connect(s).approve(sequencer.address, 100)
+
+      const tx = await sequencer.withdrawAll()
+
+      console.log(tx)
+
+      let sequencers = await sequencer.getSequencers()
+
+      console.log(sequencers)
+
     })
   })
 

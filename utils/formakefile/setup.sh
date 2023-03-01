@@ -16,6 +16,9 @@ ${SED_BIN} -i "s/^Proxy__BVM_L1StandardBridge=.*/Proxy__BVM_L1StandardBridge=$Pr
 TestBitToken=`cat address.json | grep "TestBitToken" | cut -d ":" -f 2 | cut -c 3-44`
 ${SED_BIN} -i "s/^TestBitToken=.*/TestBitToken=$TestBitToken/g" .env
 
+Proxy__Sequencer=`cat address.json | grep "Proxy__Sequencer" | cut -d ":" -f 2 | cut -c 3-44`
+${SED_BIN} -i "s/^Proxy__Sequencer=.*/Proxy__Sequencer=$Proxy__Sequencer/g" .env
+
 rm -rf address.json
 
 

@@ -4,10 +4,9 @@ import {ethers} from "hardhat"
 import { 
     getSigners, getContracts, getTokenContracts, 
     crossChainMessenger, displayWei, TestResult,
-    AllBalances, Balances } from '../utils/setup'
+    AllBalances, Balances } from '../../utils/setup'
 import {execSync} from 'child_process';
 import { loadFixture } from "@nomicfoundation/hardhat-network-helpers";
-import { check } from "prettier";
 
 let tr: TestResult
 
@@ -33,7 +32,7 @@ describe("ERC20Token contract", function () {
     async function deployTokenFixture() {
 
         const l2CustomERC20_json =await import(
-            '../artifacts/contracts/CustomERC20.sol/CustomERC20.json'
+            '../../artifacts/contracts/custom/CustomERC20.sol/CustomERC20.json'
           )
 
         const l2CustomERC20 = await new ethers.ContractFactory(
@@ -49,7 +48,7 @@ describe("ERC20Token contract", function () {
         return { l2CustomERC20, owner, addr1, addr2 };
       }
 
-    describe.skip("Deployment", function () {
+    describe("Deployment", function () {
         
         it("Should set the right name", async () => {
             const { l2CustomERC20 } = await loadFixture(deployTokenFixture);
@@ -83,7 +82,9 @@ describe("ERC20Token contract", function () {
         it("approve to contract's address 12345678", async () => {
             const { l2CustomERC20, owner } = await loadFixture(deployTokenFixture);
 
-            await l2CustomERC20.approve(l2CustomERC20.address, 12345678)
+            const tx = await l2CustomERC20.approve(l2CustomERC20.address, 12345678)
+
+            execSync('sleep 2');
 
             expect(await l2CustomERC20.allowance(owner.address, l2CustomERC20.address)).to.equal(12345678);
         });

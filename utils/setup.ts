@@ -91,7 +91,7 @@ const getContracts = async () => {
   let signers = await getSigners()
 
   const sequencer = new ethers.Contract(
-    process.env.Sequencer!, 
+    process.env.Proxy__Sequencer!, 
     Sequencer_ABI.abi, 
     signers.L1_Wallet
   )
